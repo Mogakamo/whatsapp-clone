@@ -1,10 +1,14 @@
-import {useAuthState} from "react-firebase-hooks/auth"
-import {db, provider, auth} from "../firebase"
+import { useAuthState } from "react-firebase-hooks/auth";
+import { db, provider, auth } from "../firebase";
+import Login from "./login";
+import Loading from "../components/Loading"
 
 function MyApp({ Component, pageProps }) {
-  const [user] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
 
-  if (!user) return <Login />
+  if (loading) return <Loading />
+
+  if (!user) return <Login />;
 
   return <Component {...pageProps} />;
 }
