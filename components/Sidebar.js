@@ -7,6 +7,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import * as EmailValidator from "email-validator";
 import { auth } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import {addDoc} from "firebase/firestore"
 
 const Sidebar = () => {
   const [user] = useAuthState(auth);
