@@ -5,19 +5,27 @@ import ChatIcon from "@material-ui/icons/Chat";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import SearchIcon from "@material-ui/icons/Search";
 import * as EmailValidator from "email-validator";
-import {auth} from "../firebase"
+import { auth } from "../firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Sidebar = () => {
-  const createChat = () => {
-    const input = prompt('Please enter an email address for a user you want to chat with.')
+  const [user] = useAuthState(auth);
+
+  const createChat = async () => {
+    const input = prompt(
+      "Please enter an email address for a user you want to chat with."
+    );
 
     if (!input) return null;
 
     // Email validation
-    if (EmailValidator.validate(input)) {
+    if (EmailValidator.validate(input) && input !== user.email) {
       // We need to add the chat into the DB `chats` collection
+      await addDoc(collection(db, "chats"), {
+          users: [user.email, input], 
+      })
     }
-  }
+  };
 
   return (
     <Container>
@@ -40,7 +48,6 @@ const Sidebar = () => {
       </Search>
 
       <SideBarButton onClick={createChat}>Start a new chart</SideBarButton>
-
 
       {/* List of chats */}
     </Container>
